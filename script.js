@@ -27,4 +27,8 @@ board.forEach((row) => {
 
 gameBoard.style.setProperty("--size", boardSize);
 
+mines.forEach((cell) => {
+	(if cell === board.id) {
+		board.tile.mine = true }})
+
 
