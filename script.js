@@ -27,4 +27,4 @@ board.forEach((row) => {
 
 gameBoard.style.setProperty("--size", boardSize);
 
-console.log(board.id);
+
