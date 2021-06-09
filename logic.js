@@ -14,7 +14,7 @@ export function createBoard(boardSize, numberMines) {
 		for (let y = 0; y < boardSize; y++) {
 			const element = document.createElement("div");
 			element.dataset.status = TILE_STATUS.HIDDEN;
-			element.id = x + " " + y;
+			// element.id = x + " " + y;
 			element.setAttribute("x", x);
 			element.setAttribute("y", y);
 
@@ -47,45 +47,16 @@ const getRandomInt = function (min, max) {
 
 export function renderMines(boardSize, numberMines) {
 	let mineCoordinates = [];
-	let cell = [];
+	let cell = {};
 
 	for (let i = 0; i < numberMines; i++) {
 		let randomRowCord = getRandomInt(0, boardSize);
 		let randomColCord = getRandomInt(0, boardSize);
-		cell = randomRowCord + " " + randomColCord;
+		cell = { x: randomRowCord, y: randomColCord };
+		// cell.setAttribute("data-status", "mine");
 		mineCoordinates.push(cell);
-		console.log(mineCoordinates);
+		// console.log(mineCoordinates);
 	}
 	console.log(mineCoordinates);
 	return mineCoordinates;
 }
-
-/* 
-function addBombs(board) {
-    let coords = []
-    for (let i = 0; i < numberMines; i++) {
-        let randCol = getRandomInt(0,boardSize);
-        let randRow = getRandomInt(0, boardSize);
-        let cell = board[randRow][randCol]
-        // if(!cell.isMine) continue;
-        coords.push(cell)
-        board.tile.mine = true
-    }
-}
-*/
-
-// export function renderMines(board, numberMines) {
-// 	let mineCoordinates = [];
-// 	let cell = [];
-
-// 	for (let i = 0; i < numberMines; i++) {
-// 		let randomRowCord = getRandomInt(0, 10);
-// 		let randomColCord = getRandomInt(0, 10);
-// 		cell = randomRowCord + " " + randomColCord;
-// 		mineCoordinates.push(cell);
-// 		board.tile.mine = true;
-// 		console.log(mineCoordinates);
-// 	}
-// 	console.log(mineCoordinates);
-// 	return board;
-// }
