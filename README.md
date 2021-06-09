@@ -1,3 +1,3 @@
 # JS-Simplified-----Minesweeper
-Minesweeper project from the advanced section 
 
+Minesweeper project from the advanced section
