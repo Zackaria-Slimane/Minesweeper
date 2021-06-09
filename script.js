@@ -10,14 +10,14 @@ const gameBoard = document.querySelector(".board");
 // 		gameBoard.appendChild(newTile);
 // 	}
 // }
-
 // renderBoard();
 
 const boardSize = 10;
 const numberMines = 10;
 
 const board = createBoard(boardSize, numberMines);
-const mines = renderMines(boardSize, numberMines);
+const minesPlaced = renderMines(boardSize, numberMines);
+// const minesPlaced = renderMines(board);
 
 board.forEach((row) => {
 	row.forEach((tile) => {
@@ -26,10 +26,4 @@ board.forEach((row) => {
 });
 
 gameBoard.style.setProperty("--size", boardSize);
-
-mines.forEach((cell) => {
-	if (cell === board.id) {
-		board.tile.mine = true;
-	}
-});
-
+console.log(minesPlaced);

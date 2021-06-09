@@ -14,14 +14,15 @@ export function createBoard(boardSize, numberMines) {
 		for (let y = 0; y < boardSize; y++) {
 			const element = document.createElement("div");
 			element.dataset.status = TILE_STATUS.HIDDEN;
-			element.id = `${x}:${y}`;
-			element.setAttribute("xCord", x);
-			element.setAttribute("yCord", y);
+			element.id = x + " " + y;
+			element.setAttribute("x", x);
+			element.setAttribute("y", y);
 
 			const tile = {
 				element,
 				x,
 				y,
+				cords: x + " " + y,
 				mine: false,
 				get status() {
 					return this.element.dataset.status;
@@ -40,25 +41,51 @@ export function createBoard(boardSize, numberMines) {
 }
 
 // generate the mines on random cords
-
 const getRandomInt = function (min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 };
 
 export function renderMines(boardSize, numberMines) {
 	let mineCoordinates = [];
-	for (let i = 0; i < numberMines; i++) {
-		let randomRowCoordinate = getRandomInt(0, boardSize);
-		let randomColumnCoordinate = getRandomInt(0, boardSize);
-		let cell = randomRowCoordinate + ":" + randomColumnCoordinate;
+	let cell = [];
 
-		while (mineCoordinates.includes(cell)) {
-			randomRowCoordinate = getRandomInt(0, boardSize);
-			randomColumnCoordinate = getRandomInt(0, boardSize);
-			cell = randomRowCoordinate + ":" + randomColumnCoordinate;
-		}
+	for (let i = 0; i < numberMines; i++) {
+		let randomRowCord = getRandomInt(0, boardSize);
+		let randomColCord = getRandomInt(0, boardSize);
+		cell = randomRowCord + " " + randomColCord;
 		mineCoordinates.push(cell);
-		console.log(cell);
 		console.log(mineCoordinates);
 	}
+	console.log(mineCoordinates);
+	return mineCoordinates;
 }
+
+/* 
+function addBombs(board) {
+    let coords = []
+    for (let i = 0; i < numberMines; i++) {
+        let randCol = getRandomInt(0,boardSize);
+        let randRow = getRandomInt(0, boardSize);
+        let cell = board[randRow][randCol]
+        // if(!cell.isMine) continue;
+        coords.push(cell)
+        board.tile.mine = true
+    }
+}
+*/
+
+// export function renderMines(board, numberMines) {
+// 	let mineCoordinates = [];
+// 	let cell = [];
+
+// 	for (let i = 0; i < numberMines; i++) {
+// 		let randomRowCord = getRandomInt(0, 10);
+// 		let randomColCord = getRandomInt(0, 10);
+// 		cell = randomRowCord + " " + randomColCord;
+// 		mineCoordinates.push(cell);
+// 		board.tile.mine = true;
+// 		console.log(mineCoordinates);
+// 	}
+// 	console.log(mineCoordinates);
+// 	return board;
+// }
