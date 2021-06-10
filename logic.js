@@ -42,7 +42,7 @@ export function createBoard(boardSize, numberMines) {
 
 // generate the mines on random cords
 const getRandomInt = function (min, max) {
-	return Math.floor(Math.random() * (max - min)) + min;
+	return Math.floor(Math.random() * (max - min));
 };
 
 export function renderMines(boardSize, numberMines) {
