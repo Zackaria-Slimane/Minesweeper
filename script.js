@@ -1,4 +1,4 @@
-import { createBoard, TILE_STATUS, renderMines } from "./logic.js";
+import { createBoard, TILE_STATUS, renderMines, nearTiles } from "./functions.js";
 
 const minesCount = document.querySelector(".subtext");
 const gameBoard = document.querySelector(".board");
@@ -6,12 +6,12 @@ const gameBoard = document.querySelector(".board");
 const boardSize = 10;
 const numberMines = 10;
 let minesLeft = numberMines;
-minesCount.innerText = `Mines Left :${minesLeft}`;
+// minesCount.innerText = `Mines Left :${minesLeft}`;
 
-const board = createBoard(boardSize, numberMines);
+export const board = createBoard(boardSize, numberMines);
 const minesPlaced = renderMines(boardSize, numberMines);
 
-// assignin the mines to tiles and appending tiles to board
+// Boad & mines rendering
 function renderBoard() {
 	board.forEach((row) => {
 		row.forEach((tile) => {
@@ -19,7 +19,7 @@ function renderBoard() {
 			minesPlaced.forEach((cell) => {
 				if (cell.x === tile.x && cell.y === tile.y) {
 					tile.mine = true;
-					console.log(tile);
+					// console.log(tile);
 					// tile.element.dataset.status = TILE_STATUS.MINE;
 				}
 			});
@@ -32,31 +32,7 @@ gameBoard.style.setProperty("--size", boardSize);
 
 console.log(minesPlaced);
 
-// handling event listeners for each type of click  -- mark or reveal
-board.forEach((row) => {
-	row.forEach((tile) => {
-		tile.element.addEventListener("click", () => {
-			if (tile.mine === true) {
-				tile.element.dataset.status = TILE_STATUS.MINE;
-				revealMines();
-			}
-		});
-	});
-});
-
-// mark the tiles on right click
-
-board.forEach((row) => {
-	row.forEach((tile) => {
-		tile.element.addEventListener("contextmenu", (e) => {
-			e.preventDefault();
-			if (tile.element.dataset.status === TILE_STATUS.HIDDEN) {
-				tile.element.dataset.status = TILE_STATUS.MARKED;
-			}
-		});
-	});
-});
-
+//reveal the mines in board if one is clicked
 function revealMines() {
 	board.forEach((row) => {
 		row.forEach((tile) => {
@@ -65,6 +41,57 @@ function revealMines() {
 			}
 		});
 	});
-	window.alert("YOU LOST :( ! ");
+	window.alert("YOU LOST  ! ");
+
 	return renderBoard();
 }
+
+//handling left & right click events on tiles
+// mark the tiles on right click
+board.forEach((row) => {
+	row.forEach((tile) => {
+		tile.element.addEventListener("contextmenu", (e) => {
+			e.preventDefault();
+			if (
+				tile.element.dataset.status === TILE_STATUS.HIDDEN &&
+				tile.element.dataset.status !== TILE_STATUS.MINE &&
+				tile.element.dataset.status !== TILE_STATUS.NUMBER
+			) {
+				tile.element.dataset.status = TILE_STATUS.MARKED;
+				minesLeft--;
+				minesCount.innerText = `Mines Left :${minesLeft}`;
+			} else if (
+				tile.element.dataset.status === TILE_STATUS.MARKED &&
+				tile.element.dataset.status !== TILE_STATUS.MINE &&
+				tile.element.dataset.status !== TILE_STATUS.NUMBER
+			) {
+				tile.element.dataset.status = TILE_STATUS.HIDDEN;
+				minesLeft++;
+				minesCount.innerText = `Mines Left :${minesLeft}`;
+			}
+		});
+	});
+});
+
+//reveal the tiles on left click , either mine or number
+
+board.forEach((row) => {
+	row.forEach((tile) => {
+		tile.element.addEventListener("click", () => {
+			if (tile.mine === true) {
+				tile.element.dataset.status = TILE_STATUS.MINE;
+				revealMines();
+			} else if (tile.element.dataset.status !== TILE_STATUS.MARKED) {
+				tile.element.dataset.status = TILE_STATUS.NUMBER;
+				const nearbyTiles = nearTiles(gameBoard, tile);
+				const nearbyMines = nearbyTiles.filter((tile) => tile.mine);
+				console.log(nearbyMines);
+        if (nearbyMines.length === 0) {
+          
+				} else {
+					tile.element.textContent = nearbyMines.length;
+				}
+			}
+		});
+	});
+});
