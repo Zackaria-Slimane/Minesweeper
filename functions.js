@@ -54,8 +54,9 @@ export function renderMines(boardSize, numberMines) {
 	for (let i = 0; i < numberMines; i++) {
 		let randomRowCord = getRandomInt(0, boardSize);
 		let randomColCord = getRandomInt(0, boardSize);
+
 		cell = { x: randomRowCord, y: randomColCord };
-		// cell.setAttribute("data-status", "mine");
+
 		mineCoordinates.push(cell);
 		// console.log(mineCoordinates);
 	}
@@ -75,14 +76,42 @@ export function renderMines(boardSize, numberMines) {
 // 	return adjacent;
 // }
 
-export function nearTiles(board, { x, y }) {
-	const tiles = [];
+// export function nearTiles(board, tile) {
+// 	const tiles = [];
 
-	for (let xOffset = -1; xOffset <= 1; xOffset++) {
-		for (let yOffset = -1; yOffset <= 1; yOffset++) {
-			const tile = board[x + xOffset]?.[y + yOffset];
-			if (tile) tiles.push(tile);
+// 	for (let xAdj = -1; xAdj <= 1; xAdj++) {
+// 		for (let yAdj = -1; yAdj <= 1; yAdj++) {
+// 			let adjTile = board[tile.x + xAdj]?.[tile.y + yAdj];
+// 			tiles.push(adjTile);
+// 			console.log(tiles);
+// 		}
+// 	}
+// 	return tiles;
+// }
+
+export function matchCords(a, b) {
+	return a.x === b.x && a.y === b.y;
+}
+
+export function nearTiles(tile) {
+	const adjTilesArray = [];
+
+	for (let x = tile.x - 1; x <= tile.x + 1; x++) {
+		for (let y = tile.y - 1; y <= tile.y + 1; y++) {
+			board.forEach((row) =>
+				row.forEach((tile) => {
+					if (matchCords(tile, { x, y })) {
+						adjTilesArray.push(tile);
+
+						console.log(adjTilesArray);
+					}
+				}),
+			);
 		}
 	}
-	return tiles;
+	return adjTilesArray;
 }
+
+
+
+

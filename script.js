@@ -42,6 +42,13 @@ function revealMines() {
 		});
 	});
 	window.alert("YOU LOST  ! ");
+	minesCount.innerText = "GAMEOVER";
+	gameBoard.addEventListener("click", (e) => e.stopImmediatePropagation(), {
+		capture: true,
+	});
+	gameBoard.addEventListener("contextmenu", (e) => e.stopImmediatePropagation(), {
+		capture: true,
+	});
 
 	return renderBoard();
 }
@@ -83,15 +90,52 @@ board.forEach((row) => {
 				revealMines();
 			} else if (tile.element.dataset.status !== TILE_STATUS.MARKED) {
 				tile.element.dataset.status = TILE_STATUS.NUMBER;
-				const nearbyTiles = nearTiles(gameBoard, tile);
+
+				const nearbyTiles = nearTiles(tile);
+				console.log(nearbyTiles);
+
 				const nearbyMines = nearbyTiles.filter((tile) => tile.mine);
 				console.log(nearbyMines);
-        if (nearbyMines.length === 0) {
-          
+
+				if (nearbyMines.length === 0) {
 				} else {
 					tile.element.textContent = nearbyMines.length;
 				}
 			}
+			gameWon();
 		});
 	});
 });
+
+function gameWon() {
+	let safeMines = [];
+	board.forEach((row) => {
+		row.forEach((tile) => {
+			if (
+				!tile.element.dataset.status === TILE_STATUS.MINE ||
+				tile.element.dataset.status === TILE_STATUS.NUMBER
+			) {
+				safeMines.push(tile);
+			}
+		});
+	});
+	if (safeMines.every((tile) => tile.mine === true)) {
+		board.forEach((row) => {
+			row.forEach((tile) => {
+				subtext.textContent = "You Won !";
+				gameBoard.addEventListener("click", (e) => {
+					e.stopImmediatePropagation(),
+						{
+							capture: true,
+						};
+				});
+				gameBoard.addEventListener("contextmenu", (e) => {
+					e.stopImmediatePropagation(),
+						{
+							capture: true,
+						};
+				});
+			});
+		});
+	}
+}
